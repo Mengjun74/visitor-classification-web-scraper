@@ -1,7 +1,17 @@
 from flask import Flask, request, jsonify
 import requests
 from bs4 import BeautifulSoup
+from joblib import load
+import sys
+import os
 
+# Add the path to the machine_learning directory
+sys.path.append(os.path.join(os.getcwd(), '../machine_learning'))
+
+from classifier import nlp_classifier
+
+# Load the model at the start
+model = load('../machine_learning/classic_nlp/visitor_classifier_model.pkl')
 
 app = Flask(__name__)
 
@@ -30,7 +40,7 @@ def scrape_and_classify():
         content = soup.get_text()
 
         # TODO: Implement classification logic based on content
-        classification = nlp_classify([content])
+        classification = nlp_classifier(content=content, model=model)
 
         return jsonify({
             "title": title,
