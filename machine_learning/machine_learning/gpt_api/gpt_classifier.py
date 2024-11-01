@@ -1,1 +1,0 @@
-#Chatgpt API method
