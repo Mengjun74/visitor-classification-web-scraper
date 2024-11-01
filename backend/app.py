@@ -29,7 +29,7 @@ def scrape_and_classify():
         content = soup.get_text()
 
         # TODO: Implement classification logic based on content
-        classification = classify_visitor(title, content)  # Placeholder function
+        classification = classify_visitor(content)  # Placeholder function
 
         return jsonify({
             "title": title,
@@ -38,7 +38,7 @@ def scrape_and_classify():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
-def classify_visitor(title, content):
+def classify_visitor(content):
     # Example classification logic
     if "technology" in content.lower():
         return "Technology"
