@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 from bs4 import BeautifulSoup
 
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -29,7 +30,7 @@ def scrape_and_classify():
         content = soup.get_text()
 
         # TODO: Implement classification logic based on content
-        classification = classify_visitor(content)  # Placeholder function
+        classification = nlp_classify([content])
 
         return jsonify({
             "title": title,
@@ -38,14 +39,6 @@ def scrape_and_classify():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
-def classify_visitor(content):
-    # Example classification logic
-    if "technology" in content.lower():
-        return "Technology"
-    elif "finance" in content.lower():
-        return "Finance"
-    else:
-        return "General"
 
 if __name__ == '__main__':
     app.run(debug=True)
