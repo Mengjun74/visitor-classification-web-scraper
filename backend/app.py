@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from joblib import load
 import sys
 import os
-
+from openai import OpenAI
 # Add the path to the machine_learning directory
 sys.path.append(os.path.join(os.getcwd(), '../machine_learning/classic_nlp'))
 
@@ -16,6 +16,10 @@ from gpt_model import llm_response
 
 # Load the model at the start
 model = load('../machine_learning/classic_nlp/visitor_classifier_model.pkl')
+
+client = OpenAI(
+    api_key="sk-6NNA4Co9pDYEsu2KfE84-c26bIeuOgmUIqvTYmUIC4T3BlbkFJb4K9bxv21x261vPOZZGhddjwMGnnWvkaubsBCyV_IA",
+)
 
 app = Flask(__name__)
 
@@ -45,7 +49,7 @@ def scrape_and_classify():
 
         # Implement classification logic based on content
         classification = nlp_classifier(content=content, model=model)
-        gpt_response = llm_response(content = content)
+        gpt_response = llm_response(content = content, client = client)
         return jsonify({
             "title": title,
             "classification": classification,
