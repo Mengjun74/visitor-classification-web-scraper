@@ -17,8 +17,18 @@ from gpt_model import llm_response
 # Load the model at the start
 model = load('../machine_learning/classic_nlp/visitor_classifier_model.pkl')
 
+
+# loading ChatGPT API
+import os
+from dotenv import load_dotenv
+
+# Load the .env file
+load_dotenv()
+
+# Get the API key from environment variables
+api_key = os.getenv('OPENAI_API_KEY')
 client = OpenAI(
-    api_key="sk-6NNA4Co9pDYEsu2KfE84-c26bIeuOgmUIqvTYmUIC4T3BlbkFJb4K9bxv21x261vPOZZGhddjwMGnnWvkaubsBCyV_IA",
+    api_key=api_key,
 )
 
 app = Flask(__name__)
