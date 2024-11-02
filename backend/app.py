@@ -12,7 +12,7 @@ from classifier import nlp_classifier
 
 sys.path.append(os.path.join(os.getcwd(), '../machine_learning/gpt_api'))
 from gpt_model import llm_response
-
+from generate_questions import generate_multiple_choice_questions_with_gpt, generate_related_questions
 
 # Load the model at the start
 model = load('../machine_learning/classic_nlp/visitor_classifier_model.pkl')
@@ -60,10 +60,14 @@ def scrape_and_classify():
         # Implement classification logic based on content
         classification = nlp_classifier(content=content, model=model)
         gpt_response = llm_response(content = content, client = client)
+        muilt_choice = generate_multiple_choice_questions_with_gpt(category=gpt_response, client=client, content = content)
+        general_questions = generate_related_questions(category=gpt_response, client=client, content=content)
         return jsonify({
             "title": title,
             "classification": classification,
-            "gpt_classification": gpt_response
+            "gpt_classification": gpt_response,
+            "multi_choice_questions" : muilt_choice,
+            "general_questions" : general_questions,
         })
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
