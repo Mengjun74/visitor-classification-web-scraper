@@ -10,6 +10,10 @@ sys.path.append(os.path.join(os.getcwd(), '../machine_learning/classic_nlp'))
 
 from classifier import nlp_classifier
 
+sys.path.append(os.path.join(os.getcwd(), '../machine_learning/gpt_api'))
+from gpt_model import llm_response
+
+
 # Load the model at the start
 model = load('../machine_learning/classic_nlp/visitor_classifier_model.pkl')
 
@@ -39,12 +43,13 @@ def scrape_and_classify():
         title = soup.title.string if soup.title else 'No Title'
         content = soup.get_text()
 
-        # TODO: Implement classification logic based on content
+        # Implement classification logic based on content
         classification = nlp_classifier(content=content, model=model)
-
+        gpt_response = llm_response(content = content)
         return jsonify({
             "title": title,
-            "classification": classification
+            "classification": classification,
+            "gpt_classification": gpt_response
         })
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
