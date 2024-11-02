@@ -6,7 +6,7 @@ import sys
 import os
 
 # Add the path to the machine_learning directory
-sys.path.append(os.path.join(os.getcwd(), '../machine_learning'))
+sys.path.append(os.path.join(os.getcwd(), '../machine_learning/classic_nlp'))
 
 from classifier import nlp_classifier
 
