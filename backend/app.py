@@ -60,6 +60,7 @@ def scrape_and_classify():
         # Implement classification logic based on content
         classification = nlp_classifier(content=content, model=model)
         gpt_response = llm_response(content = content, client = client)
+        # generating questions
         muilt_choice = generate_multiple_choice_questions_with_gpt(category=gpt_response, client=client, content = content)
         general_questions = generate_related_questions(category=gpt_response, client=client, content=content)
         return jsonify({
