@@ -43,10 +43,8 @@ const App = () => {
         </button>
       </form>
 
-      {/* Error message display */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {/* Conditionally render Questionnaire component */}
       {data && <Questionnaire data={data} />}
     </div>
   );

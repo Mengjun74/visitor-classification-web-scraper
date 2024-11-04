@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Questionnaire = ({ data }) => {
   const [responses, setResponses] = useState({});
+  const [submitError, setSubmitError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleResponseChange = (question, choice) => {
     setResponses((prev) => ({
@@ -10,9 +13,29 @@ const Questionnaire = ({ data }) => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('User Input:', responses);
+    console.log('User Responses:', responses);
+
+    const responsePayload = {
+      classification: data.classification,
+      gpt_classification: data.gpt_classification,
+      questions: {
+        multi_choice: data.multi_choice_questions, // Use the correct data structure
+        general: data.general_questions,
+      },
+      user_responses: responses, // User's responses
+    };
+
+    try {
+      const response = await axios.post('/submit-response', responsePayload);
+      console.log(response.data);
+      setSubmitSuccess(true);
+      setSubmitError(null);
+    } catch (error) {
+      setSubmitError(error.response ? error.response.data.error : 'Something went wrong');
+      setSubmitSuccess(false);
+    }
   };
 
   return (
@@ -50,14 +73,18 @@ const Questionnaire = ({ data }) => {
                 <input
                   type="text"
                   placeholder="Your answer"
-                  onChange={(event) => handleResponseChange(`General Question ${i + 1}`, event.target.value)}
+                  onChange={(event) => handleResponseChange(`General Question ${index + 1}`, event.target.value)}
                 />
               </div>
             ))}
           </div>
         ))}
+
         <button type="submit">Submit Responses</button>
       </form>
+
+      {submitSuccess && <p style={{ color: 'green' }}>Response saved successfully!</p>}
+      {submitError && <p style={{ color: 'red' }}>{submitError}</p>}
     </div>
   );
 };
